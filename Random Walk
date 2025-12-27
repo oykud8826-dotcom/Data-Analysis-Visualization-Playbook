@@ -1,0 +1,19 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+gunler = np.arange(1, 101) # 1'den 100'e kadar
+degisimler = np.random.randn(100) # Rastgele degisimler
+fiyatlar = 100 + degisimler.cumsum() # Baslangic 100 + degisimlerin toplami
+
+plt.figure(figsize=(10, 5))
+plt.plot(gunler, fiyatlar, label='Hisse Fiyatı', color='blue', linewidth=2)
+
+ortalama = np.mean(fiyatlar)
+plt.axhline(y=ortalama, color='red', linestyle='--', label=f'Ortalama: {ortalama:.2f}')
+
+plt.title("100 Günlük Hisse Senedi Simülasyonu (Random Walk)")
+plt.xlabel("Gün")
+plt.ylabel("Fiyat (TL)")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
