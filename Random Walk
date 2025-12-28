@@ -1,19 +1,35 @@
 import matplotlib.pyplot as plt
-import numpy as np
+import pandas as pd
 
-gunler = np.arange(1, 101) # 1'den 100'e kadar
-degisimler = np.random.randn(100) # Rastgele degisimler
-fiyatlar = 100 + degisimler.cumsum() # Baslangic 100 + degisimlerin toplami
+data = {
+    'Yil': [2020, 2021, 2022, 2023, 2024],
+    'Dolar_TL': [7.40, 13.30, 18.70, 29.50, 34.20],
+    'Gram_Altin': [450, 780, 1096, 1960, 2950],
+}
+df = pd.DataFrame(data)
+df.set_index('Yil', inplace=True)
 
-plt.figure(figsize=(10, 5))
-plt.plot(gunler, fiyatlar, label='Hisse Fiyatı', color='blue', linewidth=2)
+# Stil: Arka planı biraz daha profesyonel gri yapalım
+plt.style.use('seaborn-v0_8-darkgrid') 
 
-ortalama = np.mean(fiyatlar)
-plt.axhline(y=ortalama, color='red', linestyle='--', label=f'Ortalama: {ortalama:.2f}')
+fig, ax1 = plt.subplots(figsize=(12, 6))
 
-plt.title("100 Günlük Hisse Senedi Simülasyonu (Random Walk)")
-plt.xlabel("Gün")
-plt.ylabel("Fiyat (TL)")
-plt.legend()
-plt.grid(True, alpha=0.3)
+ax1.plot(df.index, df['Dolar_TL'], color="#003366", lw=2, label="Dolar Kuru")
+ax1.fill_between(df.index, df['Dolar_TL'], color="#003366", alpha=0.1) # %10 şeffaf boya
+ax1.set_ylabel("Dolar Kuru (TL)", color="#003366", fontweight='bold', fontsize=12)
+ax1.legend(loc='upper left')
+
+ax2 = ax1.twinx()
+ax2.plot(df.index, df['Gram_Altin'], color="#FFD700", lw=3, linestyle='-', label="Gram Altın")
+ax2.set_ylabel("Gram Altın (TL)", color="#C5A000", fontweight='bold', fontsize=12)
+ax2.legend(loc='upper center')
+
+
+ax1.annotate('Seçim Sonrası\nKur Artışı', 
+             xy=(2023, 29.50),            
+             xytext=(2021.5, 32),         
+             arrowprops=dict(facecolor='black', shrink=0.05),
+             fontsize=10, backgroundcolor="white")
+
+plt.title("Yatırım Araçları Analizi: Dolar ve Altın (2020-2024)", fontsize=16, fontweight='bold', pad=20)
 plt.show()
