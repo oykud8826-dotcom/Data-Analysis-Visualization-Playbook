@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
 data = {
     'Yil': [2020, 2021, 2022, 2023, 2024],
     'Dolar_TL': [7.40, 13.30, 18.70, 29.50, 34.20],
@@ -9,15 +10,17 @@ data = {
 df = pd.DataFrame(data)
 df.set_index('Yil', inplace=True)
 
-# Stil: Arka planı biraz daha profesyonel gri yapalım
+
 plt.style.use('seaborn-v0_8-darkgrid') 
 
 fig, ax1 = plt.subplots(figsize=(12, 6))
+
 
 ax1.plot(df.index, df['Dolar_TL'], color="#003366", lw=2, label="Dolar Kuru")
 ax1.fill_between(df.index, df['Dolar_TL'], color="#003366", alpha=0.1) # %10 şeffaf boya
 ax1.set_ylabel("Dolar Kuru (TL)", color="#003366", fontweight='bold', fontsize=12)
 ax1.legend(loc='upper left')
+
 
 ax2 = ax1.twinx()
 ax2.plot(df.index, df['Gram_Altin'], color="#FFD700", lw=3, linestyle='-', label="Gram Altın")
@@ -31,5 +34,67 @@ ax1.annotate('Seçim Sonrası\nKur Artışı',
              arrowprops=dict(facecolor='black', shrink=0.05),
              fontsize=10, backgroundcolor="white")
 
+
 plt.title("Yatırım Araçları Analizi: Dolar ve Altın (2020-2024)", fontsize=16, fontweight='bold', pad=20)
 plt.show()
+
+
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+data_faiz = {
+    'Yil': [2020, 2021, 2022, 2023, 2024],
+    'Enflasyon': [14.60, 36.08, 64.27, 64.77, 44.00], # TÜFE
+    'Faiz':      [17.00, 14.00, 9.00,  42.50, 50.00]  # Politika Faizi
+}
+
+df2 = pd.DataFrame(data_faiz)
+df2.set_index('Yil', inplace=True)
+
+fig, ax= plt.subplots(figsize= (12,6))
+ax.plot(df2.index, df2['Enflasyon'], color= 'red', linestyle='--', label= 'enflasyon', lw= 2)
+
+ax.plot(df2.index, df2['Faiz'], color='blue', lw= 2, label='faiz')
+ax.fill_between(df2.index,
+                df2['Enflasyon'],
+                df2['Faiz'],
+                where=(df2 ['Enflasyon']> df2['Faiz']),
+                color= 'red', alpha= 0.2,label= 'Negatif Reel Faiz', interpolate= True)
+ax.annotate('Ortodoks Politikaya Donus',
+            xy=(2024,50) ,
+            xytext=(2021.5, 55),
+            arrowprops= dict(facecolor= 'black', arrowstyle= '->', connectionstyle= 'arc3, rad=.2') ,
+            fontsize= 11, fontweight= 'bold', backgroundcolor= "#f0f0f0"   )
+
+ax.legend(loc= 'upper left')
+ax.grid(alpha= 0.3)
+ax.set_ylabel("Oran %")
+ax.set_title('Para Politikasinin Ozeti Faiz ve Enflasyon')
+plt.show()
+
+
+
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+data_phillips = {
+    'Yil': [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+    'Issizlik': [10.3, 10.9, 10.9, 11.0, 13.7, 13.2, 12.0, 10.4, 9.4, 8.8], # X ekseni
+    'Enflasyon': [8.8, 8.5, 11.9, 20.3, 11.8, 14.6, 36.1, 64.3, 64.8, 44.0] # Y ekseni
+}
+
+df4 = pd.DataFrame(data_phillips)
+
+fig, ax= plt.subplots(figsize= (10,6))
+sc= ax.scatter(df4['Issizlik'], df4['Enflasyon'], marker='o', c=df4['Yil'], cmap= 'viridis', s=100)
+plt.colorbar(sc, label= 'Yillar')
+
+ax.set_title('Turkiye Philips Egrisi : Issizlik ve Enflason Takasi')
+ax.set_xlabel('Issizlik orani')
+ax.set_ylabel('Enflason')
+
+ax.grid(True, lw= 0.5, alpha= 0.5)
